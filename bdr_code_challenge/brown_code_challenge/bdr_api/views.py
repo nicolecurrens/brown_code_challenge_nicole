@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from bdr_api.lib import version_helper
 from bdr_api.lib.version_helper import GatherCommitAndBranchData
+from .utilities import make_bdr_call
 
 
 log = logging.getLogger(__name__)
@@ -35,6 +36,14 @@ def info( request ):
         resp = render( request, 'info.html', context )
     return resp
 
+
+def test( request ):
+    """ The "test" view. """
+    log.debug( 'starting test()' )
+    data = make_bdr_call('items', 'bdr:80246')
+    context = {'data': data}
+    resp = render( request, 'test.html', context )
+    return resp
 
 # -------------------------------------------------------------------
 # support urls

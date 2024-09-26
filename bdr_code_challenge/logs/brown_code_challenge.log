@@ -1,0 +1,35 @@
+[26/Sep/2024 18:25:31] DEBUG [views-info()::23] starting info()
+[26/Sep/2024 18:25:31] DEBUG [views-info()::34] building template response
+[26/Sep/2024 18:28:21] DEBUG [views-version()::62] starting version()
+[26/Sep/2024 18:28:21] DEBUG [version_helper-manage_git_calls()::47] manage_git_calls
+[26/Sep/2024 18:28:21] DEBUG [version_helper-fetch_commit_data()::61] fetch_commit_data
+[26/Sep/2024 18:28:21] ERROR [version_helper-fetch_commit_data()::74] no `.git` directory or HEAD file found.
+[26/Sep/2024 18:28:21] DEBUG [version_helper-fetch_commit_data()::79] commit, ``commit_not_found``
+[26/Sep/2024 18:28:21] DEBUG [version_helper-fetch_branch_data()::87] fetch_branch_data
+[26/Sep/2024 18:28:21] ERROR [version_helper-fetch_branch_data()::98] no `.git` directory or HEAD file found.
+[26/Sep/2024 18:28:21] DEBUG [version_helper-manage_git_calls()::52] final results_holder_dct, ```{'branch': 'branch_not_found', 'commit': 'commit_not_found'}```
+[26/Sep/2024 18:28:21] DEBUG [version_helper-manage_git_calls()::55] self.branch, ``branch_not_found``
+[26/Sep/2024 18:28:21] DEBUG [views-version()::69] output, ``{
+  "request": {
+    "timestamp": "2024-09-26 18:28:21.492492",
+    "url": "http://localhost:8000/version/"
+  },
+  "response": {
+    "ip": "127.0.0.1",
+    "timetaken": "0:00:00.002163",
+    "version": "branch_not_found commit_not_found"
+  }
+}``
+[26/Sep/2024 18:30:21] DEBUG [views-test()::41] starting test()
+[26/Sep/2024 18:30:21] DEBUG [views-test()::52] building template response
+[26/Sep/2024 18:40:16] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:40:38] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:40:58] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:41:23] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:41:30] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:42:11] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:47:16] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:47:29] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:47:44] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:48:27] DEBUG [views-test()::42] starting test()
+[26/Sep/2024 18:49:09] DEBUG [views-test()::42] starting test()
