@@ -11,5 +11,5 @@ urlpatterns = [
     path( 'admin/', admin.site.urls ),
     path( 'error_check/', views.error_check, name='error_check_url' ),
     path( 'version/', views.version, name='version_url' ),
-    path(  'test/', views.test, name='test_url'),
+    path(  'items/<id>/', views.item_detail, name='item_detail_url'),
 ]

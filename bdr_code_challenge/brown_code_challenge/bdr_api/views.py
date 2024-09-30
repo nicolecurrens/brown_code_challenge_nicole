@@ -24,7 +24,7 @@ def info( request ):
     log.debug( 'starting info()' )
     ## prep data ----------------------------------------------------
     # context = { 'message': 'Hello, world.' }
-    context = { 
+    context = {
             'quote': 'The best life is the one in which the creative impulses play the largest part and the possessive impulses the smallest.',
             'author': 'Bertrand Russell' }
     ## prep response ------------------------------------------------
@@ -37,18 +37,31 @@ def info( request ):
     return resp
 
 
-def test( request ):
-    """ The "test" view. """
-    log.debug( 'starting test()' )
-    data = make_bdr_call('items', 'bdr:80246')
-    context = {'data': data}
-    resp = render( request, 'test.html', context )
+def item_detail( request, id ):
+    """ The item detail view. 
+        Grabs abstract and primary_title from the item data, if available.
+        Displays these with a template or returns as JSON.
+    """
+    log.debug( 'starting item_detail()' )
+    data = make_bdr_call('items', id)
+    name = data.get('primary_title', None)
+    abstract = data.get('abstract', None)
+    context = {'id': id,
+                'name': name,
+                'abstract': abstract
+    }
+
+    if request.GET.get( 'format', '' ) == 'json':
+        log.debug( 'building json response' )
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        log.debug( 'building template response' )
+        resp = render( request, 'items.html', context )
     return resp
 
 # -------------------------------------------------------------------
 # support urls
 # -------------------------------------------------------------------
-
 
 def error_check( request ):
     """ Offers an easy way to check that admins receive error-emails (in development).
