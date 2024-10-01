@@ -30,21 +30,25 @@
 </head>
 <body>
     <main class="container">
-        <h1>Items related to  
-            <a href="{% url 'item_detail_url' id=id %}"> {{ id }} </a>
-        </h1>
-        <p class="">Entities found:
-            {% for entity in entities %}
-                {{ entity }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-        <p> Related items: 
-            {% for item in related_items %}
-            <p>
-                <a href="{% url 'item_detail_url' id=item.pid %}"> {{ item.name }}</a>
+        {% if id != "" %}
+            <h1>Items related to  
+                <a href="{% url 'item_detail_url' id=id %}"> {{ id }} </a>
+            </h1>
+            <p class="">Entities found:
+                {% for entity in entities %}
+                    {{ entity }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
             </p>
-            {% endfor %}
-        </p>
+            <p> Related items: 
+                {% for item in related_items %}
+                <p>
+                    <a href="{% url 'item_detail_url' id=item.pid %}"> {{ item.name }}</a>
+                </p>
+                {% endfor %}
+            </p>
+        {% else %}
+            <h1>No related items!</h1>
+        {% endif %}
         
     </main>
 </body>
