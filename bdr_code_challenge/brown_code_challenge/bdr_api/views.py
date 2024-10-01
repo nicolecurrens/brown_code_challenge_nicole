@@ -51,7 +51,10 @@ def item_detail( request, id ):
         return HttpResponse(status=500)
 
     name = data.get('primary_title', None)
-    abstract = data.get('abstract', None)
+    abstract = data.get('abstract', [])
+    if abstract == []:
+        abstract = ['No abstract found.']
+
     context = {'id': id,
                 'name': name,
                 'abstract': abstract
@@ -82,7 +85,7 @@ def related_items( request, id ):
     # Grab text of useful fields to search by
     primary_title = data.get('primary_title', '')
     abstract = data.get('abstract', [])
-    # Assuming primary_title is always a string
+    # primary_title is always a string
     # and abstract is always a list
     all_text = "".join(abstract) + primary_title
 
