@@ -85,7 +85,7 @@ def make_search_call( entities ):
 
     query (list): list of named entities to search on
 
-    returns: an error, or a dictionary of the 5 items returned by the search
+    returns: an error, or a dictionary of the items returned by the search
 
     """
     # Validation
@@ -101,8 +101,9 @@ def make_search_call( entities ):
     search_string = create_query(entities)
 
     try:
+        num_results = 10
         log.info(f'Making call to /search with query {search_string}')
-        resp = requests.get(f"{BASE_API_URL}/search/?q={search_string}&rows=5&q.op=OR")
+        resp = requests.get(f"{BASE_API_URL}/search/?q={search_string}&rows={num_results}&q.op=OR")
 
         resp.raise_for_status()
 
