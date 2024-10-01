@@ -13,16 +13,20 @@ $ source ../venv/bin/activate
 
 I added two requirements to the requirements_base.in file for my project, `djangorestframework` and `spacy`. 
 
-[DRF](https://www.django-rest-framework.org/) provides some useful tools for handling requests and responses. [Spacy](https://spacy.io/) is a natural language processing library, which I used to run named entity recognition on some of the metadata from the [Brown API](https://repository.library.brown.edu/studio/api-docs/).
+[DRF](https://www.django-rest-framework.org/) provides some useful tools for handling requests and responses. [Spacy](https://spacy.io/) is a natural language processing library, which I used to run named entity recognition on some of the metadata from the [Brown API](https://repository.library.brown.edu/studio/api-docs/). Spacy requires you to download a model to use. I chose en_core_web_sm, which is a commonnly used small English model. 
 
 ---
 
 # Using the app
+The goal of this app was to create a browsing experience similar to Wikipedia or [stumble upon](https://www.stumbleupon.com/) with the Brown API. Users can click through related items from Brown's repository. When they find one they are interested in, they can view the item on Brown's website.
 
-This app adds two related endpoints to the base template which make use of the Brown API. The first is the item detail page at `/items/<id>/`. This page returns the primary title and abstract of the item with the specified ID using data from the Brown `/items` endpoint. If you need an ID to get started, you can use `bdr:80246`.
+This app adds two related endpoints to the base template which make use of the Brown API. The first is the item detail page at `/items/<id>/`. This page returns the primary title and abstract of the item with the specified ID using data from the Brown `/items` endpoint. It also links to the item in Brown's website, so you can view the item there. If you need an ID to get started, you can use `bdr:80246`.
 
-On the item detail page, you will see a link to related items. When you click the link, the view uses spacy to pull out the named entities from the primary title and abstract of the current item. Then, it uses the `/search` endpoint provided by Brown to search on those named entities and find other items that mention the same entities.
+On the item detail page, you will see a link to related items. When you click the link, the view uses spacy to pull out the named entities from the primary title and abstract of the current item. Then, it uses the `/search` endpoint provided by Brown to search on those named entities and find other items that mention the same entities. I am assuming that Brown's solr is ranking results in some reasonable way, so that the first items returned are the most relevant to the search.
 
-If the item is not found, the item detail page will display 
+If the item is not found, the item detail page will still display the item with no metadata. If the related items are not found (because the item pid is not valid or because the primary title and abstract have no entities), a page will display informing the user that there are no related items.
 
 ---
+
+# Motivation
+I studied linguistics and I love finding ways to use tools like spacy to supplement metadata. For this project, I wanted to show a relatively simple example of this by using named entity recogntion. I noticed that one of the attributes returned by the Brown API is `keywords`, which returns a search URL with a few key words that sum up the item's metadata. I think that using named entity recognition could be a great way to add to those keywords, or create them if they don't already exist.
