@@ -12,4 +12,5 @@ urlpatterns = [
     path( 'error_check/', views.error_check, name='error_check_url' ),
     path( 'version/', views.version, name='version_url' ),
     path(  'items/<id>/', views.item_detail, name='item_detail_url'),
+    path(  'related/<id>', views.related_items, name='related_item_url')
 ]

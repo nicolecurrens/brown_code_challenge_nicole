@@ -1,14 +1,15 @@
 import datetime, json, logging
 
 import trio
+import nltk
 from django.conf import settings as project_settings
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from bdr_api.lib import version_helper
 from bdr_api.lib.version_helper import GatherCommitAndBranchData
-from .utilities import make_bdr_call
-
+from .utilities import make_bdr_call, make_search_call
+from .spacy import spacy_obj
 
 log = logging.getLogger(__name__)
 
@@ -43,7 +44,11 @@ def item_detail( request, id ):
         Displays these with a template or returns as JSON.
     """
     log.debug( 'starting item_detail()' )
-    data = make_bdr_call('items', id)
+    try:
+        data = make_bdr_call('items', id)
+    except Exception as e:
+        log.error('Failed to fetch item data: %s', e)
+        return HttpResponse(status=500)
     name = data.get('primary_title', None)
     abstract = data.get('abstract', None)
     context = {'id': id,
@@ -57,6 +62,46 @@ def item_detail( request, id ):
     else:
         log.debug( 'building template response' )
         resp = render( request, 'items.html', context )
+    return resp
+
+def related_items( request, id ):
+    """ The related items view. 
+        Based on { }, finds related items by querying the solr api endpoint.
+        Displays these with a template or returns as JSON.
+    """
+    log.debug( 'starting related_items()' )
+    try:
+        data = make_bdr_call('items', id)
+    except Exception as e:
+        log.error('Failed to fetch item data: %s', e)
+        return HttpResponse(status=500)
+
+    # Grab text of useful fields to search by
+    name = data.get('primary_title', None)
+    abstract = data.get('abstract', None)
+    # Assuming primary_title is always a string
+    # and abstract is always a list
+    all_text = "".join(abstract) + name
+
+    # Get named entities from text
+    spacy = spacy_obj()
+    result = list(spacy.do_ner(all_text))
+
+    
+
+    context = {'id': id,
+                'entities': result,
+    }
+
+    data = make_search_call(result)
+    context['data'] = data
+
+    if request.GET.get( 'format', '' ) == 'json':
+        log.debug( 'building json response' )
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/json; charset=utf-8' )
+    else:
+        log.debug( 'building template response' )
+        resp = render( request, 'related.html', context )
     return resp
 
 # -------------------------------------------------------------------
