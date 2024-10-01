@@ -1,6 +1,6 @@
 # Installation
 
-I followed the installation instructions from the template repo. You will need to clone the repository and create a virtual environment (if you haven't already). Then install the requirements:
+I followed the installation instructions from the template repo. You will need to clone this repository and create a virtual environment (if you haven't already). Then install the requirements:
 
 ```bash
 $ source ../venv/bin/activate
