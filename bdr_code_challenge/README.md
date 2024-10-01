@@ -1,4 +1,4 @@
-# Setup
+# Installation
 
 I followed the installation instructions from the template repo. You will need to clone the repository and create a virtual environment (if you haven't already). Then install the requirements:
 
@@ -15,6 +15,11 @@ I added two requirements to the requirements_base.in file for my project, `djang
 
 [DRF](https://www.django-rest-framework.org/) provides some useful tools for handling requests and responses. [Spacy](https://spacy.io/) is a natural language processing library, which I used to run named entity recognition on some of the metadata from the [Brown API](https://repository.library.brown.edu/studio/api-docs/). Spacy requires you to download a model to use. I chose en_core_web_sm, which is a commonnly used small English model. 
 
+## A note on the project structure
+I use GitHub Desktop to manage my git workflow. Unfortunately, GitHub Desktop didn't play well with the `update_project_and_app_references.py` script for a few reasons **. I find that Github Desktop makes my development process faster, and I didn't want to spend too much time for it on this project. But this is the reason for the odd outer directory in this project - this is not something I would normally do. I'm sure that given enough time there is a way to make them play well together.
+
+(** If you're curious, it can only create a .git in empty directories, and for some reason wouldn't track the files that were already in the folder when I added .git.)
+
 ---
 
 # Using the app
@@ -25,6 +30,8 @@ This app adds two related endpoints to the base template which make use of the B
 On the item detail page, you will see a link to related items. When you click the link, the view uses spacy to pull out the named entities from the primary title and abstract of the current item. Then, it uses the `/search` endpoint provided by Brown to search on those named entities and find other items that mention the same entities. I am assuming that Brown's solr is ranking results in some reasonable way, so that the first items returned are the most relevant to the search.
 
 If the item is not found, the item detail page will still display the item with no metadata. If the related items are not found (because the item pid is not valid or because the primary title and abstract have no entities), a page will display informing the user that there are no related items.
+
+These endpoints should be viewable in a browser or can be returned as json by adding `?format=json` to the URL.
 
 ---
 
