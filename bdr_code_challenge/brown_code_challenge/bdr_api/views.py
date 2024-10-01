@@ -98,8 +98,8 @@ def related_items( request, id ):
     }
 
     # Get back 5 related results based on the named entities
-    related_items = make_search_call(entities_as_str)
-    context['related_items'] = related_items
+    related_items_list = make_search_call(entities_as_str)
+    context['related_items'] = related_items_list
 
     if request.GET.get( 'format', '' ) == 'json':
         log.debug( 'building json response' )
