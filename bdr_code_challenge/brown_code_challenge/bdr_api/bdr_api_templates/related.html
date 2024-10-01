@@ -30,7 +30,9 @@
 </head>
 <body>
     <main class="container">
-        <h1>Details for {{id}}</h1>
+        <h1>Details for 
+            <a href="{% url 'item_detail_url' id=id %}"> {{ id }} </a>
+        </h1>
         <p class="">Entities found:
             {% for entity in entities %}
                 {{ entity }}{% if not forloop.last %}, {% endif %}

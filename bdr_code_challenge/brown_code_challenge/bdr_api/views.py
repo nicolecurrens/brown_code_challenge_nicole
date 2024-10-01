@@ -87,8 +87,6 @@ def related_items( request, id ):
     spacy = spacy_obj()
     result = list(spacy.do_ner(all_text))
 
-    
-
     context = {'id': id,
                 'entities': result,
     }

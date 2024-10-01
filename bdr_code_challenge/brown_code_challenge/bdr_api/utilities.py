@@ -31,9 +31,8 @@ def make_bdr_call(category, id):
             resp = requests.get(f"{BASE_API_URL}/collections/{id}")
 
         resp.raise_for_status()
-        # print(resp.text)
         return json.loads(resp.text)
-    
+
     except requests.exceptions.ConnectionError:
         return Response("Connection error occurred. Please try again later.", status=status.HTTP_503_SERVICE_UNAVAILABLE)
     except requests.exceptions.Timeout:
@@ -48,9 +47,8 @@ def create_query( entities ):
     entities (list): A list of the named entities to include in the query
 
     returns: a search string formatted for solr
+    ex. 'Test'%20OR%20'Brown'
     """
-    # 'Test'%20OR%20'Brown'
-
     search_string = ""
     for word in entities:
         # %20 is for URL encoding
@@ -58,7 +56,6 @@ def create_query( entities ):
 
     # Remove extra %20OR%20 from the end
     search_string = search_string[:-8]
-    print(search_string)
     return search_string
 
 def format_search_results( solr_data ):
