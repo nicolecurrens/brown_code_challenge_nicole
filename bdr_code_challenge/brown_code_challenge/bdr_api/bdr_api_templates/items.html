@@ -37,6 +37,9 @@
             <p>{{ abs }}</p>
         {% endfor %}
         <a href="{% url 'related_item_url' id=id %}" class="parenthetical"> See related items</a>
+        <p>Interested? 
+            <a target="_blank" href="{{ uri }}"> View this item on Brown's website. </a>
+        </p>
     </main>
 </body>
 </html>

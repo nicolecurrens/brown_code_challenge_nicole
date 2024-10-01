@@ -101,6 +101,7 @@ def make_search_call( entities ):
     search_string = create_query(entities)
 
     try:
+        # Setting this number too large could cause the app to become slow.
         num_results = 10
         log.info(f'Making call to /search with query {search_string}')
         resp = requests.get(f"{BASE_API_URL}/search/?q={search_string}&rows={num_results}&q.op=OR")

@@ -50,13 +50,15 @@ def item_detail( request, id ):
         log.error(f'Failed to fetch item data for {id}: {e}')
         return HttpResponse(status=500)
 
-    name = data.get('primary_title', None)
+    uri = data.get('uri', "")
+    primary_title = data.get('primary_title', None)
     abstract = data.get('abstract', [])
     if abstract == []:
         abstract = ['No abstract found.']
 
     context = {'id': id,
-                'name': name,
+                'uri': uri,
+                'primary_title': primary_title,
                 'abstract': abstract
     }
 
@@ -85,6 +87,17 @@ def related_items( request, id ):
     # Grab text of useful fields to search by
     primary_title = data.get('primary_title', '')
     abstract = data.get('abstract', [])
+
+    # Handle case that there is no primary title or abstract
+    # Spacy will not be able to find any entities, so there are
+    # no related items. This can also happen if the ID is not valid.
+    if primary_title == "" and abstract == []:
+        context = {'id': "",
+                    'entities': [],
+                    'related_items': []
+        }
+        return render( request, 'related.html', context )
+
     # primary_title is always a string
     # and abstract is always a list
     all_text = "".join(abstract) + primary_title
