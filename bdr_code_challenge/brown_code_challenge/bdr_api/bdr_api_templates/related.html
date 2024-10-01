@@ -30,7 +30,7 @@
 </head>
 <body>
     <main class="container">
-        <h1>Details for 
+        <h1>Items related to  
             <a href="{% url 'item_detail_url' id=id %}"> {{ id }} </a>
         </h1>
         <p class="">Entities found:
@@ -39,7 +39,7 @@
             {% endfor %}
         </p>
         <p> Related items: 
-            {% for item in data %}
+            {% for item in related_items %}
             <p>
                 <a href="{% url 'item_detail_url' id=item.pid %}"> {{ item.name }}</a>
             </p>

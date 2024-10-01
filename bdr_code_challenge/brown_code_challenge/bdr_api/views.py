@@ -47,8 +47,9 @@ def item_detail( request, id ):
     try:
         data = make_bdr_call('items', id)
     except Exception as e:
-        log.error('Failed to fetch item data: %s', e)
+        log.error(f'Failed to fetch item data for {id}: {e}')
         return HttpResponse(status=500)
+
     name = data.get('primary_title', None)
     abstract = data.get('abstract', None)
     context = {'id': id,
@@ -66,33 +67,39 @@ def item_detail( request, id ):
 
 def related_items( request, id ):
     """ The related items view. 
-        Based on { }, finds related items by querying the solr api endpoint.
-        Displays these with a template or returns as JSON.
+        Based on the primary_title and abstract, it finds related 
+        items by querying the solr api endpoint. It displays these 
+        with a template or returns as JSON.
     """
-    log.debug( 'starting related_items()' )
+    log.debug(f'Starting related_items() with id: {id}')
+
     try:
         data = make_bdr_call('items', id)
     except Exception as e:
-        log.error('Failed to fetch item data: %s', e)
+        log.error(f'Failed to fetch item data for {id}: {e}')
         return HttpResponse(status=500)
 
     # Grab text of useful fields to search by
-    name = data.get('primary_title', None)
-    abstract = data.get('abstract', None)
+    primary_title = data.get('primary_title', '')
+    abstract = data.get('abstract', [])
     # Assuming primary_title is always a string
     # and abstract is always a list
-    all_text = "".join(abstract) + name
+    all_text = "".join(abstract) + primary_title
 
     # Get named entities from text
     spacy = spacy_obj()
-    result = list(spacy.do_ner(all_text))
+    entities = spacy.do_ner(all_text)
+    # the entities list contains spacy spans, not strings.
+    # must convert to strings before running the json serializer
+    entities_as_str = [str(entity) for entity in entities]
 
     context = {'id': id,
-                'entities': result,
+                'entities': entities_as_str,
     }
 
-    data = make_search_call(result)
-    context['data'] = data
+    # Get back 5 related results based on the named entities
+    related_items = make_search_call(entities_as_str)
+    context['related_items'] = related_items
 
     if request.GET.get( 'format', '' ) == 'json':
         log.debug( 'building json response' )

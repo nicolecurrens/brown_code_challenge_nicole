@@ -24,10 +24,10 @@ def make_bdr_call(category, id):
 
     try:
         if category == 'items':
-            log.info('Making call to /items.')
+            log.info(f'Making call to /items with id {id}.')
             resp = requests.get(f"{BASE_API_URL}/items/{id}")
         else:  # Collections
-            log.info('Making call to /collections.')
+            log.info(f'Making call to /collections with id {id}.')
             resp = requests.get(f"{BASE_API_URL}/collections/{id}")
 
         resp.raise_for_status()
@@ -59,6 +59,16 @@ def create_query( entities ):
     return search_string
 
 def format_search_results( solr_data ):
+    """
+    Grab and format the docs returned by solr.
+    Each item in docs is one search result.
+
+    solr_data (json): raw data returned by solr
+
+    returns: a list of dictionaries containing the pid and 
+        title of each search result.
+
+    """
     docs = solr_data['response']['docs']
     results = []
 
@@ -87,14 +97,16 @@ def make_search_call( entities ):
         log.debug('Query must be a list.')
         return Response("Query must be a list.", status=status.HTTP_400_BAD_REQUEST)
 
+    # Create solr search string
     search_string = create_query(entities)
 
     try:
-        log.info('Making call to /search.')
+        log.info(f'Making call to /search with query {search_string}')
         resp = requests.get(f"{BASE_API_URL}/search/?q={search_string}&rows=5&q.op=OR")
 
         resp.raise_for_status()
 
+        # Format the search results as a list of dictionaries
         search_results = format_search_results(json.loads(resp.text))
 
         return search_results
@@ -105,4 +117,3 @@ def make_search_call( entities ):
         return Response("The request timed out. Please try again later.", status=status.HTTP_504_GATEWAY_TIMEOUT)
     except requests.exceptions.RequestException as e:
         return Response(f"An error occurred: {e}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
