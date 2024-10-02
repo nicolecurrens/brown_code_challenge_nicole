@@ -36,4 +36,4 @@ These endpoints should be viewable in a browser or can be returned as json by ad
 ---
 
 # Motivation
-I studied linguistics and I love finding ways to use tools like spacy to supplement metadata. For this project, I wanted to show a relatively simple example of this by using named entity recogntion. I noticed that one of the attributes returned by the Brown API is `keywords`, which returns a search URL with a few key words that sum up the item's metadata. I think that using named entity recognition could be a great way to add to those keywords, or create them if they don't already exist.
+I studied linguistics and I love finding ways to use tools like spacy to supplement metadata. For this project, I wanted to show a relatively simple example of this by using named entity recognition. I noticed that one of the attributes returned by the Brown API is `keywords`, which returns a search URL with a few key words that sum up the item's metadata. I think that using named entity recognition could be a great way to add to those keywords, or create them if they don't already exist.
