@@ -14,16 +14,15 @@
         }
         .container {
             background-color: #fff;
-            padding: 1.25rem; /* Equivalent to 20px if base font-size is 16px */
+            padding: 1rem; /* Equivalent to 20px if base font-size is 16px */
             border-radius: 0.5rem;
             box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
-            width: 80%;
+            width: 90%;
             max-width: 37.5rem;
             margin: calc(100vh / 4) auto 0 auto;
         }
-        .parenthetical {
-            font-size: 0.75rem;
-            color: #666;
+        .link {
+            font-size: 1rem;
             margin-top: 2rem;
         }
     </style>
@@ -31,13 +30,13 @@
 <body>
     <main class="container">
         <h1>Details for {{id}}</h1>
+        <a href="{% url 'related_item_url' id=id %}" class="link"> See related items</a>
         <p class="">Name: {{ primary_title }}</p>
         <p>Abstract: </p>
         {% for abs in abstract %}
             <p>{{ abs }}</p>
         {% endfor %}
-        <a href="{% url 'related_item_url' id=id %}" class="parenthetical"> See related items</a>
-        <p>Interested? 
+        <p style="text-align: center;">Interested? 
             <a target="_blank" href="{{ uri }}"> View this item on Brown's website. </a>
         </p>
     </main>
